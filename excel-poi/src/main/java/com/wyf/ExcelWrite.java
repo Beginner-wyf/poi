@@ -1,18 +1,15 @@
 package com.wyf;
 
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
+import org.apache.poi.xssf.usermodel.XSSFCellStyle;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.joda.time.DateTime;
 import org.junit.Test;
 
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 
 /**
  * @author wangyifan
@@ -85,27 +82,46 @@ public class ExcelWrite {
      */
     @Test
     public void biggerWrite() throws Exception {
+
         //计算开始时间
-        long start = System.currentTimeMillis();
+//        long start = System.currentTimeMillis();
         //创建工作簿
-        Workbook workbook = new XSSFWorkbook();
+//        Workbook workbook = new XSSFWorkbook();
         //创建工作表
-        Sheet sheet = workbook.createSheet("小王的大数据");
+//        Sheet sheet = workbook.createSheet("小王的大数据");
+
+
+        FileInputStream fileInputStream = new FileInputStream("C:\\Users\\wangyifan\\Desktop\\指令表.xlsx");
+        //获得工作簿
+        XSSFWorkbook workbook = new XSSFWorkbook(fileInputStream);
+        //获得工作表
+        XSSFSheet sheet = workbook.getSheetAt(0);
+        //获取单元格样式对象
+        XSSFCellStyle cellStyle = workbook.createCellStyle();
+        cellStyle.setBorderTop(BorderStyle.THIN);
+        cellStyle.setBorderBottom(BorderStyle.THIN);
+        cellStyle.setBorderLeft(BorderStyle.THIN);
+        cellStyle.setBorderRight(BorderStyle.THIN);
+        cellStyle.setAlignment(HorizontalAlignment.CENTER);
+        cellStyle.setVerticalAlignment(VerticalAlignment.CENTER);
         //循环写入行和列
-        for (int rowNum = 0; rowNum < 65537; rowNum++) {
+        for (int rowNum = 2; rowNum < 65537; rowNum++) {
             Row row = sheet.createRow(rowNum);
-            for (int cellNum = 0; cellNum < 10; cellNum++) {
+            //设置行高
+            row.setHeightInPoints((float) 23.75);
+            for (int cellNum = 0; cellNum < 6; cellNum++) {
                 Cell cell = row.createCell(cellNum);
                 cell.setCellValue(cellNum);
+                cell.setCellStyle(cellStyle);
             }
         }
         System.out.println("大数据插入完成");
         FileOutputStream fileOutputStream = null;
         try {
-            fileOutputStream = new FileOutputStream(PATH + "小王的大数据测试07.xlsx");
+            fileOutputStream = new FileOutputStream("C:\\Users\\wangyifan\\Desktop\\指令表.xlsx");
             workbook.write(fileOutputStream);
-            long end = System.currentTimeMillis();
-            System.out.println("完成时间："+(double) (end - start) / 1000);
+//            long end = System.currentTimeMillis();
+//            System.out.println("完成时间："+(double) (end - start) / 1000);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } finally {
@@ -150,6 +166,5 @@ public class ExcelWrite {
             workbook.dispose();
         }
     }
-
 
 }

@@ -45,7 +45,7 @@ public class ExcelRead {
     public void read2() throws IOException {
         FileInputStream fileInputStream = null;
         try {
-            fileInputStream = new FileInputStream(PATH + "小王的表格读取.xlsx");
+            fileInputStream = new FileInputStream("C:\\Users\\wangyifan\\Desktop\\指令表.xlsx");
             //获得工作簿
             XSSFWorkbook workbook = new XSSFWorkbook(fileInputStream);
             //获得工作表
@@ -61,7 +61,7 @@ public class ExcelRead {
                 if (row != null){
                     //读取列
                     //获取当前行的总列数（有数据的列数）
-                    int cellCount = row.getPhysicalNumberOfCells();
+                    int cellCount = 7;
                     for (int cellNum = 0; cellNum < cellCount; cellNum++) {
                         XSSFCell cell = row.getCell(cellNum);
                         if (cell != null){
